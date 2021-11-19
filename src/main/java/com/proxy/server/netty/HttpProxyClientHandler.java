@@ -44,14 +44,14 @@ public class HttpProxyClientHandler extends ChannelInboundHandlerAdapter {
         }
 
         ByteBuf in = (ByteBuf) msg;
-        header.digest(in);
+        header.digest(in); // read headers
 
         if (!header.isComplete()) {
             in.release();
             return;
         }
 
-        logger.info(id + " {}" , header.getAllLines());
+        logger.info(id + " {}" , header.getAllLines()); //Log headers
         clientChannel.config().setAutoRead(false); // disable AutoRead until remote connection is ready
 
         if (header.isHttps()) { // if https, respond 200 to create tunnel
